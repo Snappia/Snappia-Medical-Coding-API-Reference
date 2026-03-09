@@ -6,7 +6,7 @@ The Snappia API uses advanced AI to process patient reports and return structure
 
 ---
 
-## 🚀 Available Reference Clients
+## Available Reference Clients
 
 Select the implementation that best fits your tech stack:
 
@@ -18,7 +18,7 @@ Select the implementation that best fits your tech stack:
 
 ---
 
-## 🛠️ General API Workflow
+## General API Workflow
 
 The Snappia API follows an **asynchronous job-based workflow**:
 
@@ -30,7 +30,7 @@ Typical processing time ranges from **1 to 10 minutes** depending on the complex
 
 ---
 
-## 🔑 Authentication
+## Authentication
 
 All API requests require a **Bearer API token** in the authorization header:
 
@@ -40,7 +40,7 @@ Authorization: Bearer <your_api_token>
 
 ---
 
-## 🌐 API Details
+## API Details
 
 -   **Base URL**: `https://api.snappia.claims/api/v1`
 -   **Content-Type**: `application/json`
@@ -51,12 +51,12 @@ Authorization: Bearer <your_api_token>
 
 ---
 
-## 🧪 Testing with Postman
+## Testing with Postman
 
 Each folder contains a `snappia_api.postman_collection.json` file. You can import this into Postman to quickly test endpoints without writing any code.
 
 ---
 
-## 🆘 Support
+## Support
 
 For API access, token generation, or technical support, please contact your Snappia account administrator or visit our developer portal.
