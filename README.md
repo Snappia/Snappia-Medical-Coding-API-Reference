@@ -12,9 +12,9 @@ Select the implementation that best fits your tech stack:
 
 | Language / Tool | Location | Description |
 | :--- | :--- | :--- |
-| **Python** | [`/snappia-api-python-example`](./snappia-api-python-example) | Production-ready Python client using `requests`. |
-| **JavaScript** | [`/snappia-api-javascript-example`](./snappia-api-javascript-example) | Node.js client using `axios` (ES Modules). |
-| **CURL / Bash** | [`/snappia-api-curl-example`](./snappia-api-curl-example) | Raw REST examples and a workflow shell script. |
+| **Python** | [`/snappia-api-python-example`](.snappia-api-python-example) | Production-ready Python client using `requests`. |
+| **JavaScript** | [`/snappia-api-javascript-example`](.snappia-api-javascript-example) | Node.js client using `axios` (ES Modules). |
+| **CURL / Bash** | [`/snappia-api-curl-example`](.snappia-api-curl-example) | Raw REST examples and a workflow shell script. |
 
 ---
 
