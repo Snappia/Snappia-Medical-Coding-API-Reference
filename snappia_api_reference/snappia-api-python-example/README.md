@@ -60,7 +60,8 @@ example_usage.py
 Clone the repository:
 
 ```bash
-git clone https://github.com/snappia/snappia-api-python-example.git
+git clone https://github.com/anuragjoardar/Snappia-Medical-Coding.git
+cd snappia_api_reference
 cd snappia-api-python-example
 ```
 
@@ -160,8 +161,8 @@ ICD–CPT linkage mappings
 Example extraction:
 
 ```python
-icd_codes = result["medical_coding_result"]["icd"]["result"]
-cpt_codes = result["medical_coding_result"]["cpt"]["result"]
+icd_result = result["medical_coding_result"]["icd"]["result"]
+cpt_result = result["medical_coding_result"]["cpt"]["result"]
 ```
 
 ---
@@ -237,7 +238,7 @@ Two limits are enforced per user.
 
 | Limit           | Reset        |
 | --------------- | ------------ |
-| 50 jobs per day | Midnight UTC |
+| User Specific | Midnight UTC |
 
 ### Polling
 
