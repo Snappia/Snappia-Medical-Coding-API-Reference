@@ -134,7 +134,7 @@ class SnappiaClient:
     @staticmethod
     def get_icd_codes(job_result: Dict) -> List[Dict]:
 
-        return job_result["medical_coding_result"]["icd"]["result"]
+        return job_result["medical_coding_result"]["icd"]
 
     # ----------------------------
     # Extract CPT Codes
@@ -142,7 +142,7 @@ class SnappiaClient:
     @staticmethod
     def get_cpt_codes(job_result: Dict) -> List[Dict]:
 
-        return job_result["medical_coding_result"]["cpt"]["result"]
+        return job_result["medical_coding_result"]["cpt"]
 
     # ----------------------------
     # Extract Linkage
@@ -150,4 +150,4 @@ class SnappiaClient:
     @staticmethod
     def get_linkages(job_result: Dict) -> Dict:
 
-        return job_result["medical_coding_result"]["linkage"]["linkage"]
+        return job_result["medical_coding_result"]["linkage"]
