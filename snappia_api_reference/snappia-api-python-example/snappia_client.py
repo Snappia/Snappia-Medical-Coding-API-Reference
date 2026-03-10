@@ -76,7 +76,7 @@ class SnappiaClient:
     def poll_job(
         self,
         job_id: str,
-        interval: int = 5,
+        interval: int = 10,
         max_wait: int = 600,
     ) -> Dict:
         """
@@ -86,7 +86,6 @@ class SnappiaClient:
         start_time = time.time()
 
         while True:
-
             job = self.get_job(job_id)
 
             status = job["status"]
