@@ -43,13 +43,13 @@ snappia-api-curl-example/
 
 README.md
 workflow.sh
-snappia_api.postman_collection.json
 ```
 
-| File                                  | Description                                    |
-| ------------------------------------- | ---------------------------------------------- |
-| `workflow.sh`                         | Shell script demonstrating full API workflow    |
-| `snappia_api.postman_collection.json` | Postman collection for API testing              |
+| File          | Description                                 |
+| ------------- | ------------------------------------------- |
+| `workflow.sh` | Shell script demonstrating full API workflow |
+
+A shared **Postman collection** is available in the parent `snappia_api_reference/` directory.
 
 ---
 

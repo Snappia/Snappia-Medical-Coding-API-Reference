@@ -1,0 +1,105 @@
+{
+  "info": {
+    "name": "Snappia Medical Coding API",
+    "_postman_id": "snappia-api",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "API_TOKEN",
+      "value": "<api-token-key>",
+      "type": "string"
+    },
+    {
+      "key": "JOB_ID",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "BASE_URL",
+      "value": "https://api.snappia.claims/api/v1",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Submit Job",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{API_TOKEN}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/jobs",
+          "host": ["{{BASE_URL}}"],
+          "path": ["jobs"]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"patient_report\": \"Henry is a 40-year-old male patient, who presents to California Orthopedic Hospital after severe pain in his joints. For the past few years, he has been suffering from a chronic condition called rheumatoid arthritis. Now, he is undergoing a therapeutic procedure for the treatment of this disorder. He is also receiving regular monitoring of his medication levels. A therapeutic drug assay used to measure adalimumab levels is prescribed by a physician. The main purpose of this assay is to limit the amount of the drug so that it may not exceed its therapeutic range. The patient is also taking oxcarbazepine routinely and a separate test is also conducted to monitor this medication levels in blood. Both essays prescribed by the physician are performed by laboratory, during the same visit. The laboratory also provided a detailed special report of results.\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Get Job Status",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{API_TOKEN}}"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/jobs/{{JOB_ID}}",
+          "host": ["{{BASE_URL}}"],
+          "path": ["jobs", "{{JOB_ID}}"]
+        }
+      }
+    },
+    {
+      "name": "List Jobs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{API_TOKEN}}"
+          }
+        ],
+        "url": {
+          "raw": "{{BASE_URL}}/jobs?skip=0&limit=5",
+          "host": ["{{BASE_URL}}"],
+          "path": ["jobs"],
+          "query": [
+            {
+              "key": "skip",
+              "value": "0"
+            },
+            {
+              "key": "limit",
+              "value": "5"
+            },
+            {
+              "key": "status_filter",
+              "value": "completed",
+              "disabled": true
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
