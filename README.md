@@ -2,7 +2,7 @@
 
 Welcome to the **Snappia Medical Coding API** reference repository. This collection provides code examples and client implementations in various languages to help you integrate Snappia's automated medical coding into your workflow.
 
-The Snappia API uses advanced AI to process patient reports and return structured results, including **ICD-10-CM diagnosis codes**, **CPT procedure codes**, and **ICD–CPT linkage mappings**.
+The Snappia API uses advanced AI Workflow to process patient reports and return structured results, including **ICD-10-CM diagnosis codes**, **CPT procedure codes**, and **ICD–CPT linkage mappings**.
 
 ---
 
@@ -46,7 +46,7 @@ Authorization: Bearer <your_api_token>
 -   **Content-Type**: `application/json`
 
 ### Rate Limits
--   **Job Submission**: 50 jobs per day.
+-   **Job Submission**: User specific.
 -   **Polling**: 60 requests per minute.
 
 ---
@@ -59,4 +59,4 @@ Each folder contains a `snappia_api.postman_collection.json` file. You can impor
 
 ## Support
 
-For API access, token generation, or technical support, please contact your Snappia account administrator or visit our developer portal.
+For API access, token generation, or technical support, please contact your Snappia account administrator.
