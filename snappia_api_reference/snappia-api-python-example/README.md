@@ -153,16 +153,16 @@ medical_coding_result
 Which includes:
 
 ```
-ICD diagnosis codes
-CPT procedure codes
+ICD Results
+CPT Results
 ICD–CPT linkage mappings
 ```
 
 Example extraction:
 
 ```python
-icd_result = result["medical_coding_result"]["icd"]["result"]
-cpt_result = result["medical_coding_result"]["cpt"]["result"]
+icd_result = result["medical_coding_result"]["icd"]
+cpt_result = result["medical_coding_result"]["cpt"]
 ```
 
 ---
@@ -172,29 +172,55 @@ cpt_result = result["medical_coding_result"]["cpt"]["result"]
 Example ICD results:
 
 ```
-ICD RESULTS
-Code: I20.9
-Description: Angina pectoris, unspecified
-Type: Primary
-Confidence: 95.5
+{
+"care_setting": "outpatient",
+"rationale": "Based on the clinical documentation...",
+"result": [
+  {
+    "ICD-10-CM Code": "I20.9",
+    "ICD Description": "Angina pectoris, unspecified",
+    "Type": "Primary",
+    "Order No.": 1,
+    "Rationale": "The patient presents with chest pain...",
+    "Confidence Score": 95.5
+  }
+          ]
+}
 ```
 
 Example CPT results:
 
 ```
-CPT RESULTS
-Code: 99213
-Description: Office or other outpatient visit
-Units: 1
-Confidence: 92.0
+{
+"rationale": "Based on the level of service documented...",
+"result": [
+  {
+    "code": "99213",
+    "description": "Office or other outpatient visit for evaluation and management...",
+    "modifier": null,
+    "units": 1,
+    "score": 92.0,
+    "rationale": "The documentation supports a level 3 E/M visit..."
+  }
+          ]
+}
 ```
 
 Example ICD-CPT linkage:
 
 ```
-CPT Code: 99213
-Linked ICD Codes:
-  - I20.9 - Angina pectoris, unspecified
+{
+"linkage": {
+        "99213": {
+          "icd": ["I20.9 - Angina pectoris, unspecified"],
+          "description": "Office or other outpatient visit...",
+          "modifier": null,
+          "units": 1,
+          "score": 92.0,
+          "rationale": "This CPT code is linked to the primary ICD..."
+                  }
+          }
+}
 ```
 
 ---
