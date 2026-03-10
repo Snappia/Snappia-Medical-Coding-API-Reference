@@ -3,11 +3,11 @@
 # Snappia API Workflow Script (CURL)
 
 # Configuration
-API_TOKEN="<your_api_token>"
+API_TOKEN="<api-token-key>"
 BASE_URL="https://api.snappia.claims/api/v1"
-PATIENT_REPORT="Patient is a 55-year-old male presenting with chest pain and shortness of breath for the past 2 hours."
+PATIENT_REPORT="Henry is a 40-year-old male patient, who presents to California Orthopedic Hospital after severe pain in his joints. For the past few years, he has been suffering from a chronic condition called rheumatoid arthritis. Now, he is undergoing a therapeutic procedure for the treatment of this disorder. He is also receiving regular monitoring of his medication levels. A therapeutic drug assay used to measure adalimumab levels is prescribed by a physician. The main purpose of this assay is to limit the amount of the drug so that it may not exceed its therapeutic range. The patient is also taking oxcarbazepine routinely and a separate test is also conducted to monitor this medication levels in blood. Both essays prescribed by the physician are performed by laboratory, during the same visit. The laboratory also provided a detailed special report of results."
 
-if [ "$API_TOKEN" == "<your_api_token>" ]; then
+if [ "$API_TOKEN" == "<api-token-key>" ]; then
     echo "Error: Please set your API_TOKEN in the script."
     exit 1
 fi
@@ -40,12 +40,27 @@ while true; do
 
     if [ "$STATUS" == "completed" ]; then
         echo "Job completed successfully!"
-        # Try to use jq for pretty printing if available
+
+        # Extract and display ICD Codes
+        echo -e "\nICD Codes"
         if command -v jq &> /dev/null; then
-            echo $JOB_RESPONSE | jq .
+            echo $JOB_RESPONSE | jq -r '.medical_coding_result.icd.result[] | "\(.["ICD-10-CM Code"]) - \(.["ICD Description"])"'
         else
             echo $JOB_RESPONSE
         fi
+
+        # Extract and display CPT Codes
+        echo -e "\nCPT Codes"
+        if command -v jq &> /dev/null; then
+            echo $JOB_RESPONSE | jq -r '.medical_coding_result.cpt.result[] | "\(.code) - \(.description)"'
+        fi
+
+        # Extract and display Linkages
+        echo -e "\nLinkages"
+        if command -v jq &> /dev/null; then
+            echo $JOB_RESPONSE | jq -r '.medical_coding_result.linkage.linkage | to_entries[] | "\(.key) → \(.value.icd | join(", "))"'
+        fi
+
         break
     elif [ "$STATUS" == "failed" ]; then
         echo "Job failed."
@@ -53,7 +68,7 @@ while true; do
         break
     fi
 
-    sleep 5
+    sleep 10
 done
 
 # 3. List Jobs

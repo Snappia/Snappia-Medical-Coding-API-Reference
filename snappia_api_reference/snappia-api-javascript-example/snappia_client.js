@@ -52,7 +52,7 @@ export class SnappiaClient {
     // ----------------------------
     // Poll Job
     // ----------------------------
-    async pollJob(jobId, interval = 5000, maxWait = 600000) {
+    async pollJob(jobId, interval = 10000, maxWait = 600000) {
         const startTime = Date.now();
         while (true) {
             const job = await this.getJob(jobId);
@@ -87,14 +87,14 @@ export class SnappiaClient {
     // Data Extraction Helpers
     // ----------------------------
     static getIcdCodes(jobResult) {
-        return jobResult.medical_coding_result.icd.result;
+        return jobResult.medical_coding_result.icd;
     }
 
     static getCptCodes(jobResult) {
-        return jobResult.medical_coding_result.cpt.result;
+        return jobResult.medical_coding_result.cpt;
     }
 
     static getLinkages(jobResult) {
-        return jobResult.medical_coding_result.linkage.linkage;
+        return jobResult.medical_coding_result.linkage;
     }
 }
