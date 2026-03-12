@@ -53,7 +53,7 @@ Authorization: Bearer <your_api_token>
 
 ## Testing with Postman
 
-Each folder contains a `snappia_api.postman_collection.json` file. You can import this into Postman to quickly test endpoints without writing any code.
+The project contains a `snappia_api.postman_collection.json` file. You can import this into Postman to quickly test endpoints without writing any code.
 
 ---
 
