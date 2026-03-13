@@ -59,4 +59,4 @@ The project contains a `snappia_api.postman_collection.json` file. You can impor
 
 ## Support
 
-For API access, token generation, or technical support, please contact your Snappia account administrator.
+ For API access, token generation, or technical support, please contact api@snappia.claims
