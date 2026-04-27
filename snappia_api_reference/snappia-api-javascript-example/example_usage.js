@@ -5,8 +5,12 @@ const API_TOKEN = "<api-token-key>";
 const client = new SnappiaClient(API_TOKEN);
 
 const patientReport = `
-Henry is a 40-year-old male patient, who presents to California Orthopedic Hospital after severe pain in his joints. For the past few years, he has been suffering from a chronic condition called rheumatoid arthritis. Now, he is undergoing a therapeutic procedure for the treatment of this disorder. He is also receiving regular monitoring of his medication levels. A therapeutic drug assay used to measure adalimumab levels is prescribed by a physician. The main purpose of this assay is to limit the amount of the drug so that it may not exceed its therapeutic range. The patient is also taking oxcarbazepine routinely and a separate test is also conducted to monitor this medication levels in blood. Both essays prescribed by the physician are performed by laboratory, during the same visit. The laboratory also provided a detailed special report of results.
+David, a 63-year-old established male patient, presents to Massachusetts General Hospital's ophthalmology clinic with progressive blurring of vision in his right eye over the past eight months, difficulty driving at night, and increased glare sensitivity. His past medical history includes type 2 diabetes mellitus with diabetic retinopathy in both eyes, well-controlled hypertension, and benign prostatic hyperplasia. Comprehensive ophthalmologic examination revealed a best-corrected visual acuity of 20/80 in the right eye and 20/30 in the left eye, with slit-lamp examination demonstrating a dense nuclear sclerotic cataract grade 3+ in the right eye. Intraocular pressures and dilated fundus examination were within acceptable limits for surgical intervention, with stable non-proliferative diabetic retinopathy noted. After failure of conservative management with updated refraction and glare-reducing lenses, the ophthalmologist recommended cataract extraction with intraocular lens implantation. The patient underwent outpatient phacoemulsification of the right eye cataract with insertion of a monofocal posterior chamber intraocular lens. Monitored anesthesia care with topical and intracameral anesthesia was administered personally by the attending anesthesiologist, with a total anesthesia time of 35 minutes. A separate problem-focused evaluation and management visit including interval history, complete ophthalmologic examination, and low-complexity medical decision-making was documented earlier on the same date of service prior to the procedure.
 `;
+
+function icdSummary(icdList) {
+    return icdList.map(i => `${i["ICD-10-CM Code"]} - ${i["ICD Description"]}`);
+}
 
 async function runExample() {
     if (API_TOKEN === "<api-token-key>") {
@@ -30,7 +34,11 @@ async function runExample() {
         // Extract Results
         const icdCodes = SnappiaClient.getIcdCodes(job);
         const cptCodes = SnappiaClient.getCptCodes(job);
-        const linkages = SnappiaClient.getLinkages(job);
+        const hcpcsCodes = SnappiaClient.getHcpcsCodes(job);
+        const pcsCodes = SnappiaClient.getPcsCodes(job);
+        const icdCptLinkage = SnappiaClient.getIcdCptLinkage(job);
+        const icdHcpcsLinkage = SnappiaClient.getIcdHcpcsLinkage(job);
+        const icdPcsLinkage = SnappiaClient.getIcdPcsLinkage(job);
 
         console.log("\nICD Codes");
         for (const code of icdCodes["result"]) {
@@ -42,10 +50,29 @@ async function runExample() {
             console.log(`${code["code"]} - ${code["description"]}`);
         }
 
-        console.log("\nLinkages");
-        for (const [cpt, data] of Object.entries(linkages["linkage"])) {
-            const icdList = data.icd.map(i => `${i["ICD-10-CM Code"]} - ${i["ICD Description"]}`);
-            console.log(`${cpt} → ${icdList}`);
+        console.log("\nHCPCS Codes");
+        for (const code of hcpcsCodes["result"]) {
+            console.log(`${code["code"]} - ${code["description"]}`);
+        }
+
+        console.log("\nICD-10-PCS Codes");
+        for (const code of pcsCodes["result"]) {
+            console.log(`${code["code"]} - ${code["description"]}`);
+        }
+
+        console.log("\nICD-CPT Linkage");
+        for (const [cpt, data] of Object.entries(icdCptLinkage)) {
+            console.log(`${cpt} → ${icdSummary(data.icd)}`);
+        }
+
+        console.log("\nICD-HCPCS Linkage");
+        for (const [hcpcs, data] of Object.entries(icdHcpcsLinkage)) {
+            console.log(`${hcpcs} → ${icdSummary(data.icd)}`);
+        }
+
+        console.log("\nICD-PCS Linkage");
+        for (const [pcs, data] of Object.entries(icdPcsLinkage)) {
+            console.log(`${pcs} → ${icdSummary(data.icd)}`);
         }
 
         // List Jobs

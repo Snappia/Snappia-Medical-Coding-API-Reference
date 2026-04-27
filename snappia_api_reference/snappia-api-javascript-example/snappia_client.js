@@ -94,7 +94,27 @@ export class SnappiaClient {
         return jobResult.medical_coding_result.cpt;
     }
 
+    static getHcpcsCodes(jobResult) {
+        return jobResult.medical_coding_result.hcpcs;
+    }
+
+    static getPcsCodes(jobResult) {
+        return jobResult.medical_coding_result.pcs;
+    }
+
     static getLinkages(jobResult) {
         return jobResult.medical_coding_result.linkage;
+    }
+
+    static getIcdCptLinkage(jobResult) {
+        return jobResult.medical_coding_result.linkage.icd_cpt_linkage;
+    }
+
+    static getIcdHcpcsLinkage(jobResult) {
+        return jobResult.medical_coding_result.linkage.icd_hcpcs_linkage;
+    }
+
+    static getIcdPcsLinkage(jobResult) {
+        return jobResult.medical_coding_result.linkage.icd_pcs_linkage;
     }
 }

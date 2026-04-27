@@ -144,9 +144,49 @@ class SnappiaClient:
         return job_result["medical_coding_result"]["cpt"]
 
     # ----------------------------
-    # Extract Linkage
+    # Extract HCPCS Codes
+    # ----------------------------
+    @staticmethod
+    def get_hcpcs_codes(job_result: Dict) -> Dict:
+
+        return job_result["medical_coding_result"]["hcpcs"]
+
+    # ----------------------------
+    # Extract ICD-10-PCS Codes
+    # ----------------------------
+    @staticmethod
+    def get_pcs_codes(job_result: Dict) -> Dict:
+
+        return job_result["medical_coding_result"]["pcs"]
+
+    # ----------------------------
+    # Extract Linkage (full object)
     # ----------------------------
     @staticmethod
     def get_linkages(job_result: Dict) -> Dict:
 
         return job_result["medical_coding_result"]["linkage"]
+
+    # ----------------------------
+    # Extract ICD-CPT Linkage
+    # ----------------------------
+    @staticmethod
+    def get_icd_cpt_linkage(job_result: Dict) -> Dict:
+
+        return job_result["medical_coding_result"]["linkage"]["icd_cpt_linkage"]
+
+    # ----------------------------
+    # Extract ICD-HCPCS Linkage
+    # ----------------------------
+    @staticmethod
+    def get_icd_hcpcs_linkage(job_result: Dict) -> Dict:
+
+        return job_result["medical_coding_result"]["linkage"]["icd_hcpcs_linkage"]
+
+    # ----------------------------
+    # Extract ICD-PCS Linkage
+    # ----------------------------
+    @staticmethod
+    def get_icd_pcs_linkage(job_result: Dict) -> Dict:
+
+        return job_result["medical_coding_result"]["linkage"]["icd_pcs_linkage"]

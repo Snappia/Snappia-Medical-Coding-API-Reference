@@ -6,7 +6,9 @@ The API processes patient reports and returns structured medical coding results 
 
 * **ICD-10-CM diagnosis codes**
 * **CPT procedure codes**
-* **ICD–CPT linkage mappings**
+* **HCPCS procedure/supply codes**
+* **ICD-10-PCS procedure codes** (inpatient)
+* **ICD↔CPT, ICD↔HCPCS, and ICD↔PCS linkage mappings**
 
 The examples in this repository show how to:
 
@@ -14,7 +16,7 @@ The examples in this repository show how to:
 * Submit a patient report for coding
 * Poll for job completion
 * Retrieve structured coding results
-* Extract ICD, CPT, and linkage data
+* Extract ICD, CPT, HCPCS, PCS, and linkage data
 * List submitted jobs with pagination
 
 ---
@@ -155,14 +157,22 @@ Which includes:
 ```
 ICD Results
 CPT Results
-ICD–CPT linkage mappings
+HCPCS Results
+ICD-10-PCS Results
+ICD-CPT / ICD-HCPCS / ICD-PCS linkage mappings
 ```
 
 Example extraction:
 
 ```javascript
-const icdResult = result["medical_coding_result"]["icd"];
-const cptResult = result["medical_coding_result"]["cpt"];
+const icdResult   = result["medical_coding_result"]["icd"];
+const cptResult   = result["medical_coding_result"]["cpt"];
+const hcpcsResult = result["medical_coding_result"]["hcpcs"];
+const pcsResult   = result["medical_coding_result"]["pcs"];
+
+const icdCptLinkage   = result["medical_coding_result"]["linkage"]["icd_cpt_linkage"];
+const icdHcpcsLinkage = result["medical_coding_result"]["linkage"]["icd_hcpcs_linkage"];
+const icdPcsLinkage   = result["medical_coding_result"]["linkage"]["icd_pcs_linkage"];
 ```
 
 ---
@@ -173,18 +183,18 @@ Example ICD results:
 
 ```
 {
-"care_setting": "outpatient",
-"rationale": "Based on the clinical documentation...",
-"result": [
-  {
-    "ICD-10-CM Code": "I20.9",
-    "ICD Description": "Angina pectoris, unspecified",
-    "Type": "Primary",
-    "Order No.": 1,
-    "Rationale": "The patient presents with chest pain...",
-    "Confidence Score": 95.5
-  }
-          ]
+  "care_setting": "outpatient",
+  "rationale": "The patient note clearly indicates an 'ophthalmology clinic' visit ...",
+  "result": [
+    {
+      "Order No.": 1,
+      "ICD-10-CM Code": "H25.11",
+      "ICD Description": "Age-related nuclear cataract, right eye",
+      "Type": "Primary",
+      "Confidence Score": 92.3,
+      "Rationale": "The patient has a dense nuclear sclerotic cataract grade 3+ ..."
+    }
+  ]
 }
 ```
 
@@ -192,34 +202,129 @@ Example CPT results:
 
 ```
 {
-"rationale": "Based on the level of service documented...",
-"result": [
-  {
-    "code": "99213",
-    "description": "Office or other outpatient visit for evaluation and management...",
-    "modifier": null,
-    "units": 1,
-    "score": 92.0,
-    "rationale": "The documentation supports a level 3 E/M visit..."
-  }
-          ]
+  "rationale": "Code 66984 was retained as it accurately describes ...",
+  "result": [
+    {
+      "code": "66984",
+      "description": "Extracapsular cataract removal with insertion of intraocular lens prosthesis ...",
+      "units": 1,
+      "modifier": "RT",
+      "rationale": "The patient underwent outpatient phacoemulsification ...",
+      "score": 100.0
+    }
+  ]
 }
 ```
+
+Example HCPCS results:
+
+```
+{
+  "rationale": "Code Selection Summary: The patient underwent cataract extraction ...",
+  "result": [
+    {
+      "code": "G9654",
+      "description": "Monitored anesthesia care (mac)",
+      "modifier": "AA-P2-QS",
+      "units": 1,
+      "score": 100,
+      "rationale": "The patient received 'Monitored anesthesia care' ..."
+    }
+  ]
+}
+```
+
+Example ICD-10-PCS results:
+
+```
+{
+  "rationale": "These ICD-10-PCS codes comprehensively document ...",
+  "result": [
+    {
+      "code": "08R03JZ",
+      "description": "Medical and Surgical - Eye - Replacement - Eye, Right - Percutaneous - Synthetic Substitute - No Qualifier",
+      "score": 95.26,
+      "rationale": "This procedure involves the surgical removal of a cataract ..."
+    }
+  ]
+}
+```
+
+The `linkage` object is split into three sub-keys: `icd_cpt_linkage`, `icd_hcpcs_linkage`, and `icd_pcs_linkage`. Each is a map from procedure code → entry (with `description`, `rationale`, `score`, and — for CPT/HCPCS — `units` and `modifier`). The `icd` field on every entry is an array of the full ICD objects linked to that procedure.
 
 Example ICD-CPT linkage:
 
 ```
 {
-"linkage": {
-        "99213": {
-          "icd": ["I20.9 - Angina pectoris, unspecified"],
-          "description": "Office or other outpatient visit...",
-          "modifier": null,
-          "units": 1,
-          "score": 92.0,
-          "rationale": "This CPT code is linked to the primary ICD..."
-                  }
-          }
+  "icd_cpt_linkage": {
+    "66984": {
+      "description": "Extracapsular cataract removal with insertion of intraocular lens prosthesis ...",
+      "units": 1,
+      "modifier": "RT",
+      "rationale": "The patient underwent outpatient phacoemulsification ...",
+      "score": 100.0,
+      "icd": [
+        {
+          "Order No.": 1,
+          "ICD-10-CM Code": "H25.11",
+          "ICD Description": "Age-related nuclear cataract, right eye",
+          "Type": "Primary",
+          "Confidence Score": 92.3,
+          "Rationale": "The patient has a dense nuclear sclerotic cataract ..."
+        }
+      ]
+    }
+  }
+}
+```
+
+Example ICD-HCPCS linkage:
+
+```
+{
+  "icd_hcpcs_linkage": {
+    "G9654": {
+      "description": "Monitored anesthesia care (mac)",
+      "units": 1,
+      "modifier": "AA-P2-QS",
+      "rationale": "The patient received 'Monitored anesthesia care' ...",
+      "score": 100,
+      "icd": [
+        {
+          "Order No.": 1,
+          "ICD-10-CM Code": "H25.11",
+          "ICD Description": "Age-related nuclear cataract, right eye",
+          "Type": "Primary",
+          "Confidence Score": 92.3,
+          "Rationale": "The patient has a dense nuclear sclerotic cataract ..."
+        }
+      ]
+    }
+  }
+}
+```
+
+Example ICD-PCS linkage (note: no `units`/`modifier`):
+
+```
+{
+  "icd_pcs_linkage": {
+    "08R03JZ": {
+      "description": "Medical and Surgical - Eye - Replacement - Eye, Right - Percutaneous - Synthetic Substitute - No Qualifier",
+      "score": 95.26,
+      "rationale": "This procedure involves the surgical removal of a cataract ...",
+      "icd": [
+        {
+          "Order No.": 1,
+          "ICD-10-CM Code": "H25.11",
+          "ICD Description": "Age-related nuclear cataract, right eye",
+          "Type": "Primary",
+          "Confidence Score": 92.3,
+          "Rationale": "The patient has a dense nuclear sclerotic cataract ..."
+        }
+      ]
+    }
+  }
 }
 ```
 
@@ -320,15 +425,19 @@ The script will:
 2. Poll the job until completion
 3. Print ICD codes
 4. Print CPT codes
-5. Print ICD-CPT linkage
-6. List previously submitted jobs
+5. Print HCPCS codes
+6. Print ICD-10-PCS codes
+7. Print ICD-CPT linkage
+8. Print ICD-HCPCS linkage
+9. Print ICD-PCS linkage
+10. List previously submitted jobs
 
 ---
 
 # Example Patient Report
 
 ```
-Henry is a 40-year-old male patient, who presents to California Orthopedic Hospital after severe pain in his joints. For the past few years, he has been suffering from a chronic condition called rheumatoid arthritis. Now, he is undergoing a therapeutic procedure for the treatment of this disorder. He is also receiving regular monitoring of his medication levels. A therapeutic drug assay used to measure adalimumab levels is prescribed by a physician. The main purpose of this assay is to limit the amount of the drug so that it may not exceed its therapeutic range. The patient is also taking oxcarbazepine routinely and a separate test is also conducted to monitor this medication levels in blood. Both essays prescribed by the physician are performed by laboratory, during the same visit. The laboratory also provided a detailed special report of results.
+David, a 63-year-old established male patient, presents to Massachusetts General Hospital's ophthalmology clinic with progressive blurring of vision in his right eye over the past eight months, difficulty driving at night, and increased glare sensitivity. His past medical history includes type 2 diabetes mellitus with diabetic retinopathy in both eyes, well-controlled hypertension, and benign prostatic hyperplasia. Comprehensive ophthalmologic examination revealed a best-corrected visual acuity of 20/80 in the right eye and 20/30 in the left eye, with slit-lamp examination demonstrating a dense nuclear sclerotic cataract grade 3+ in the right eye. Intraocular pressures and dilated fundus examination were within acceptable limits for surgical intervention, with stable non-proliferative diabetic retinopathy noted. After failure of conservative management with updated refraction and glare-reducing lenses, the ophthalmologist recommended cataract extraction with intraocular lens implantation. The patient underwent outpatient phacoemulsification of the right eye cataract with insertion of a monofocal posterior chamber intraocular lens. Monitored anesthesia care with topical and intracameral anesthesia was administered personally by the attending anesthesiologist, with a total anesthesia time of 35 minutes. A separate problem-focused evaluation and management visit including interval history, complete ophthalmologic examination, and low-complexity medical decision-making was documented earlier on the same date of service prior to the procedure.
 ```
 
 ---
@@ -349,4 +458,4 @@ This repository is provided as **reference code for Snappia API users**.
 
 # Support
 
-For API access or support, contact your Snappia account administrator.
+For API access, token generation, or technical support, please contact api@snappia.claims
